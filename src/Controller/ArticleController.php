@@ -7,6 +7,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 final class ArticleController extends AbstractController
 {
@@ -14,7 +15,7 @@ final class ArticleController extends AbstractController
     public function index(): Response
     {
         return $this->render('article/index.html.twig', [
-            'controller_name' => 'Cécile',
+            'controller_name' => ($this->getUser() ) ?  $this->getUser()->getNom() : "??",
         ]);
     }
 
@@ -28,13 +29,16 @@ final class ArticleController extends AbstractController
         ]);
     }
 
+
     #[Route('/addArticle', name: 'app_article_add')]
+    #[IsGranted('IS_AUTHENTICATED_FULLY')]
     public function add(EntityManagerInterface $entityManager ): Response
     {
         $article = new Article();
 
         $article->setTitre('Mon article');
         $article->setContenu('Mon contenu');
+        $article->setAuteur($this->getUser());
 
         $entityManager->persist($article);
 
