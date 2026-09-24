@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello ArticleController!{% endblock %}
+
+{% block body %}
+
+<div class="example-wrapper">
+
+       <h2>{{ article.titre }}</h2>
+       <p>{{ article.contenu }}</p>
+       <p>Ecrit par {{ article.auteur.nom }}  , le {{ article.datepublication | date('d/m/Y') }}</p>
+       <p>Ecrit par {{ article.auteur }}</p>
+
+       <a href="{{ path('app_article') }}">Retour</a>
+       <hr>
+
+</div>
+{% endblock %}

@@ -22,6 +22,15 @@ final class ArticleController extends AbstractController
         ]);
     }
 
+    #[Route('/article_show/{id}', name: 'article_show')]
+    public function show(Article $article): Response
+    {
+
+        return $this->render('article/show.html.twig', [
+            'article' => $article,
+        ]);
+    }
+
     #[Route('/articleRandom', name: 'app_article_random')]
     public function random(): Response
     {
