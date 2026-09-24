@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Article;
+use App\Repository\ArticleRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -12,10 +13,12 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 final class ArticleController extends AbstractController
 {
     #[Route('/article', name: 'app_article')]
-    public function index(): Response
+    public function index(ArticleRepository $articleRepository): Response
     {
+        $articles = $articleRepository->findAll();
         return $this->render('article/index.html.twig', [
             'controller_name' => ($this->getUser() ) ?  $this->getUser()->getNom() : "??",
+            'articles' => $articles,
         ]);
     }
 

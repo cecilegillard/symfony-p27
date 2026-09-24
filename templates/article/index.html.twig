@@ -11,10 +11,12 @@
 <div class="example-wrapper">
     <h1>Hello {{ controller_name }}! ✅</h1>
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code>D:/Blog/src/Controller/ArticleController.php</code></li>
-        <li>Your template at <code>D:/Blog/templates/article/index.html.twig</code></li>
-    </ul>
+   {% for article in articles %}
+       <h2>{{ article.titre }}</h2>
+       <p>{{ article.contenu }}</p>
+       <p>Ecrit par {{ article.auteur.nom }}</p>
+       <p>Ecrit par {{ article.auteur }}</p>
+       <hr>
+    {% endfor %}
 </div>
 {% endblock %}
