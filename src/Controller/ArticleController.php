@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Article;
 use App\Form\ArticleType;
 use App\Repository\ArticleRepository;
+use App\Service\FileUpload;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -46,7 +47,7 @@ final class ArticleController extends AbstractController
 
     #[Route('/addArticle', name: 'app_article_add')]
     #[IsGranted('IS_AUTHENTICATED_FULLY')]
-    public function add(Request $request, EntityManagerInterface $entityManager): Response
+    public function add(Request $request, EntityManagerInterface $entityManager, FileUpload $fileUpload): Response
     {
         $article = new Article();
 
@@ -58,6 +59,13 @@ final class ArticleController extends AbstractController
             // récupère les données du formulaire
             $article = $form->getData();
             $article->setAuteur($this->getUser());
+
+            $image = $form->get('image')->getData();
+            if ($image) {
+                $imageName = $fileUpload->upload($image);
+                $article->setImage($imageName);
+            }
+
             $entityManager->persist($article); // on ajoute l'article dans l'entity manager pour qu'il puisse s'en occuper au moment du flush
             $entityManager->flush(); // on execute les req en BDD
             return $this->redirectToRoute('app_article');
