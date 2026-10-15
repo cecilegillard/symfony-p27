@@ -17,6 +17,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 final class CategorieController extends AbstractController
 {
     #[Route('/categorie', name: 'app_categorie')]
+    #[IsGranted('ROLE_MODERATEUR')]
     public function index(CategorieRepository $categorieRepository): Response
     {
         $categories = $categorieRepository->findAll();
@@ -25,7 +26,7 @@ final class CategorieController extends AbstractController
         ]);
     }
     #[Route('/deleteCategorie/{id}', name: 'app_categorie_delete')]
-    #[IsGranted('IS_AUTHENTICATED_FULLY')]
+    #[IsGranted('ROLE_MODERATEUR')]
     public function delete(Categorie $categorie,  EntityManagerInterface $entityManager): Response
     {
         $entityManager->remove($categorie);
@@ -34,7 +35,7 @@ final class CategorieController extends AbstractController
     }
 
     #[Route('/editCategorie/{id}', name: 'app_categorie_edit')]
-    #[IsGranted('IS_AUTHENTICATED_FULLY')]
+    #[IsGranted('ROLE_MODERATEUR')]
     public function edit(Categorie $categorie, Request $request, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(CategorieType::class, $categorie);
